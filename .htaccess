@@ -1,0 +1,14 @@
+RewriteEngine On 
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^admin/([_0-9a-z-]+) index.php?pg=$1 [QSA,L,NC]
+RewriteRule ^perfil/? index.php?pg=perfil [QSA,L,NC]
+RewriteRule ^configuracao/? index.php?pg=configuracao [QSA,L,NC]
+RewriteRule ^clientes/? index.php?pg=clientes [QSA,L,NC]
+RewriteRule ^modalidades/? index.php?pg=modalidades [QSA,L,NC]
+RewriteRule ^personal/? index.php?pg=personal [QSA,L,NC]
+RewriteRule ^funcionario/? index.php?pg=funcionario [QSA,L,NC]
+RewriteRule ^treinos/? index.php?pg=treinos [QSA,L,NC]
+RewriteRule ^equipamento/? index.php?pg=equipamento [QSA,L,NC]
+RewriteRule ^usuarios/? index.php?pg=usuarios [QSA,L,NC]
+RewriteRule ^relatorios/? index.php?pg=relatorios [QSA,L,NC]
