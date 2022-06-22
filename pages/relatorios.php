@@ -16,128 +16,40 @@
 				session_start();
 			$case = Utility::getVariable("case", INPUT_GET);
 			switch($case){
-                case 6:
-                    $all = true;
-                    $response = Cliente::getAllClienteOrderName();
-                    $data = array();
-                    $template = array(  "CLIENTE" => "nomeCompleto",
-                                        "CPF" => "CPF",
-                                        "EMAIL"=>"email",
-                                        "TELEFONE"=>"telefone",
-                                        "DATA DE NASCIMENTO"=>"dataNascimento",
-                                        "ENDEREÇO"=>"endereco");
-                    $objPHPExcel = new PHPExcel();
-                    $objPHPExcel->setActiveSheetIndex(0);
-                    $dados = array("usuario"=>$_SESSION['nome']);
-                    firularClientes($objPHPExcel,$dados);
-                    $objPHPExcel->getActiveSheet()->fromArray(array_keys($template), NULL, 'A6');
-                    $rowCount = 6;
-                    $totalProcessos = count($response);
-                    foreach($response as $nesimoProcesso=>$cliente){
-                        $collumCount = 0;
-                        $arraySomaPeriodoPago = array();
-                        foreach($template as $key => $value){
-                            $column = PHPExcel_Cell::stringFromColumnIndex($collumCount);
-                            $row = $rowCount;
-                            $cell = $column.$row;
-                            //centralizar célula:
-                            $objPHPExcel->getActiveSheet()->getStyle($cell)->applyFromArray(
-                                array(
-                                    'alignment' => array(
-                                        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                    )
-                                )
-                            ); 
-                            switch($value){                                    
-                                case "dataNascimento":
-                                    if($cliente[$value] != "")
-                                        $objPHPExcel->getActiveSheet()->setCellValueExplicit($cell,Utility::dateFormatToBR($cliente[$value]),PHPExcel_Cell_DataType::TYPE_STRING);
-                                    $objPHPExcel->getActiveSheet()->getStyle($cell)->applyFromArray(
-                                        array(
-                                            'fill' => array(
-                                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                                                'color' => array('rgb' => 'dbdbdb')
-                                            ),
-                                        )
-                                    );
-                                break;
-                                case "nomeCompleto":                            
-                                    $objPHPExcel->getActiveSheet()->setCellValueExplicit($cell,$cliente[$value],PHPExcel_Cell_DataType::TYPE_STRING);
-                                    $objPHPExcel->getActiveSheet()->getStyle($cell)->applyFromArray(
-                                        array(
-                                            'borders' => array(
-                                                'left' => array(
-                                                    'style' => PHPExcel_Style_Border::BORDER_THICK,
-                                                    'color' => array('rgb' => '045E7B')
-                                                )
-                                            )
-                                        )
-                                    ); 
-                                break;
-                                case "endereco":
-                                    $objPHPExcel->getActiveSheet()->setCellValueExplicit($cell,$cliente[$value],PHPExcel_Cell_DataType::TYPE_STRING);
-                                    $objPHPExcel->getActiveSheet()->getStyle($cell)->applyFromArray(
-                                        array(
-                                            'alignment' => array(
-                                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-                                            ),
-                                            'fill' => array(
-                                                'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                                                'color' => array('rgb' => 'dbdbdb')
-                                            ),
-                                            'borders' => array(
-                                                'right' => array(
-                                                    'style' => PHPExcel_Style_Border::BORDER_THICK,
-                                                    'color' => array('rgb' => '000000')
-                                                )
-                                            )
-                                        )
-                                    ); 
-                                break;
-                                default:
-                                    $objPHPExcel->getActiveSheet()->setCellValueExplicit($cell,$cliente[$value],PHPExcel_Cell_DataType::TYPE_STRING);
-                                break;
-                            }
-                            $objPHPExcel->getActiveSheet()->getStyle($cell)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER); 
-                            $collumCount+=1;
-                        }
+                case 1:
 
-                        $rowCount+=1;
-                        if($nesimoProcesso==$totalProcessos-1){
-                            $collumCount = 0;
-                            for($i=0;$i<count($template);$i++){
-                                $column = PHPExcel_Cell::stringFromColumnIndex($collumCount);
-                                $row = $rowCount;
-                                $cell = $column.$row;
-                                $objPHPExcel->getActiveSheet()->getStyle($cell)->applyFromArray(
-                                    array(
-                                        'alignment' => array(
-                                            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                        ),
-                                        'borders' => array(
-                                            'top' => array(
-                                                'style' => PHPExcel_Style_Border::BORDER_THICK,
-                                                'color' => array('rgb' => '000000')
-                                            )
-                                        )
-                                    )
-                                ); 
-                                $collumCount+=1;
-                            }
-                        }
-                    }
-
-                    $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-                    ob_start();
-                    $objWriter->save("php://output");
-                    $xlsData = ob_get_contents();
-                    ob_end_clean();
-                    
+                    $AllModalidadeAndCount = Turma::getAllModalidadeAndCount();
                     $response =  array(
                             'status' => 200,
-                            'fileName' => "Relatório do Cliente",
-                            'file' => "data:application/vnd.ms-excel;base64,".base64_encode($xlsData)
-                        );
+                            'title' => "Relatório de Turmas",
+                            'response' => $AllModalidadeAndCount
+                    );
+                    
+                    die(json_encode($response));
+
+                break;
+
+                case 2:
+
+                    $AllModalidadeAndCount = Usuarioo::getAllUsuariosAndCount();
+                    $response =  array(
+                            'status' => 200,
+                            'title' => "Relatório de Usuários",
+                            'response' => $AllModalidadeAndCount
+                    );
+                    
+                    die(json_encode($response));
+
+                break;
+
+                case 3:
+
+                    $AllModalidadeAndCount = Turma::getAllModalidadeAndCount();
+                    $response =  array(
+                            'status' => 200,
+                            'title' => "Relatório de Turmas",
+                            'response' => $AllModalidadeAndCount
+                    );
                     
                     die(json_encode($response));
 
@@ -145,6 +57,15 @@
 			}
 		break;
         default:
+            $div1 = new DivElement();
+            $div1->setID("turmas");
+            $div2= new DivElement();
+            $div2->setID("usuarios");
+            $div = new DivElement();
+            $div->InsertRow("6",$div1);
+            $div->InsertRow("6",$div2);
+            $div->Show();
+
         break;
     }
     Utility::InsertJavascriptFile("relatorios");

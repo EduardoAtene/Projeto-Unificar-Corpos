@@ -131,6 +131,19 @@
             }
             return json_encode($retorno);
         }
+
+        public static function getAllUsuariosAndCount(){
+            $querySql = "   SELECT t.nome AS Acesso,COUNT(*) AS Quantidade
+                            FROM ".Usuarioo::$database." u
+                            JOIN ".TipoAcessoo::$database." t ON t.id = u.idTipoAcesso_id 
+                            GROUP BY u.idTipoAcesso_id";
+            $fetch = Connection::query($querySql);
+            $return = array();
+            foreach($fetch as $rs){
+                array_push($return, array($rs['Acesso'],intval($rs['Quantidade'])));
+            }
+            return $return;
+        }
     }
 
     class Cliente extends DatabaseIteraction{
@@ -247,6 +260,31 @@
 
         public function __construct($id=-1){
             $this->fillObjectWithQuery($id);
+        }
+
+        public static function getQuantidadeInscritos($idTurma){
+            $querySql = "   SELECT COUNT(*) AS Quantidade
+                            FROM ".Turma_Cliente::$database."
+                            JOIN ".Turma::$database." WHERE 
+                            WHERE idTurma = ".$idTurma;
+            $fetch = Connection::query($querySql);
+            foreach($fetch as $rs){
+                return $rs['Quantidade'];
+            }
+            return 0;
+        }
+
+        public static function getAllModalidadeAndCount(){
+            $querySql = "   SELECT m.nome AS Modalidade,COUNT(*) AS Quantidade
+                            FROM ".Turma::$database." t
+                            JOIN ".Modalidade::$database." m ON m.id = t.idModalidade 
+                            GROUP BY t.idModalidade";
+            $fetch = Connection::query($querySql);
+            $return = array();
+            foreach($fetch as $rs){
+                array_push($return, array($rs['Modalidade'],intval($rs['Quantidade'])));
+            }
+            return $return;
         }
     }
 

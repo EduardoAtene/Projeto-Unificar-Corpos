@@ -78,6 +78,9 @@
 							$menu->show();
 							$menu = new ItemMenu("Usuários", "sigma","*usuarios");
 							$menu->show();
+							$menu = new ItemMenu("Relatórios", "content-paste","*relatorios");
+							$menu->show();
+							
 						break;
 						case 2: // Aluno
 							$menu = new ItemMenu("Modalidades", "beta","*modalidades");
